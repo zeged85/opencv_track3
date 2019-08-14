@@ -1,0 +1,40 @@
+roslaunch armadillo2 armadillo2.launch gazebo:=true teleop:=true
+roslaunch mybot_gazebo mybot_world.launch
+python ./server.py
+
+
+
+
+
+roslaunch turtlebot3_gazebo turtlebot3_house2.launch 
+
+
+
+roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch 
+
+
+*opencv_track 
+python move_base_follow.py 
+
+
+
+roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=$HOME/blank.yaml
+
+
+python ./action.py 
+
+
+
+
+###############################
+
+zeged@ubuntu:~$ roscd opencv_track/
+zeged@ubuntu:~/catkin_ws/src/opencv_track$ cd src/
+zeged@ubuntu:~/catkin_ws/src/opencv_track/src$ python move_base_follow2.py
+
+
+roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=$HOME/blank.yaml
+roslaunch turtlebot3_gazebo multi_turtlebot3_armadillo.launch 
+roslaunch turtlebot3_gazebo turtlebot3_house2.launch
+roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch
+
