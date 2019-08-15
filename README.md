@@ -22,24 +22,38 @@ install [gazebo](http://emanual.robotis.com/docs/en/platform/turtlebot3/simulati
 
 
 ```bash
-$ cd ~/catkin_ws/src/
-$ git clone https://github.com/zeged85/opencv_track3.git
-$ cd ~/catkin_ws && catkin_make
+cd ~/catkin_ws/src/
+git clone https://github.com/zeged85/opencv_track3.git
+cd ~/catkin_ws && catkin_make
+cp ~/catkin_ws/src/follow/misc/plannar_mover.cpp ~/catkin_ws/src/plannar_mover/src/
+
 ```
 
 
 ## Bringup
 choose simulator or robot
 
-### terminal 1
+### terminal 1 - rosCore
+optional
+
+alternativly u can run normal robot bringup.
 
 simulator
 ```bash
 roslaunch follow follow_sim.launch 
 ```
-or normal robot bringup.
 
-### terminal 2
+### terminal 1.1 - teleop
+
+```bash
+roslaunch follow linear_teleop_key.launch  
+```
+
+
+
+
+
+### terminal 2 - Control
 
 launch controller
 ```bash
@@ -48,7 +62,7 @@ cd src
 python ./follow3.py
 ```
 
-### terminal 3
+### terminal 3 - GUI
 
 launch GUI
 
