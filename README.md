@@ -31,18 +31,20 @@ cp ~/catkin_ws/src/follow/misc/plannar_mover.cpp ~/catkin_ws/src/plannar_mover/s
 
 
 ## Bringup
-choose simulation or robot
+run simulation or real robot
 
-### terminal 1 - rosCore
-optional
-
-alternatively u can run normal robot bringup.
+### terminal 1 - rosCore: simulator or robot
+run normal robot bringup with roscore, or simulator.
 
 simulator
 ```bash
 roslaunch follow follow_sim.launch 
 ```
 
+roscore + robot launch(on robot)
+```bash
+roscore
+```
 ### terminal 1.1 - teleop
 
 ```bash
