@@ -22,15 +22,54 @@ install [gazebo](http://emanual.robotis.com/docs/en/platform/turtlebot3/simulati
 
 
 ```bash
-$ sudo apt-get update
-$ sudo apt-get upgrade
-$ wget https://raw.githubusercontent.com/ROBOTIS-GIT/robotis_tools/master/install_ros_kinetic.sh && chmod 755 ./install_ros_kinetic.sh && bash ./install_ros_kinetic.sh
+$ cd ~/catkin_ws/src/
+$ git clone https://github.com/zeged85/opencv_track3.git
+$ cd ~/catkin_ws && catkin_make
 ```
 
 
 ## Bringup
+choose simulator or robot
+
+### terminal 1
+
+simulator
+```bash
+roslaunch follow follow_sim.launch 
+```
+or normal robot bringup.
+
+### terminal 2
+
+launch controller
+```bash
+roscd follow
+cd src
+python ./follow3.py
+```
+
+### terminal 3
+
+launch GUI
+
+```bash
+roscd follow
+cd src
+python ./auto_ros_commands.py 
+```
 
 
 
+
+
+
+
+```python
+import foobar
+
+foobar.pluralize('word') # returns 'words'
+foobar.pluralize('goose') # returns 'geese'
+foobar.singularize('phenomena') # returns 'phenomenon'
+```
 
 
