@@ -31,12 +31,12 @@ cp ~/catkin_ws/src/follow/misc/plannar_mover.cpp ~/catkin_ws/src/plannar_mover/s
 
 
 ## Bringup
-choose simulator or robot
+choose simulation or robot
 
 ### terminal 1 - rosCore
 optional
 
-alternativly u can run normal robot bringup.
+alternatively u can run normal robot bringup.
 
 simulator
 ```bash
@@ -46,7 +46,7 @@ roslaunch follow follow_sim.launch
 ### terminal 1.1 - teleop
 
 ```bash
-roslaunch follow linear_teleop_key.launch  
+roslaunch follow linear_teleop_key.launch
 ```
 
 
@@ -76,14 +76,5 @@ python ./auto_ros_commands.py
 
 
 
-
-
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
-```
 
 
