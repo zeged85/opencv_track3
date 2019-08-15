@@ -74,7 +74,7 @@ python ./auto_ros_commands.py
 
 
 
-
+make sure topics match in follow3.py and auto_ros_commands.py to robot/simulator
 
 
 
