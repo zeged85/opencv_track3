@@ -6,7 +6,7 @@ a ROS package for color based following
 
 Follow the install [guide](http://emanual.robotis.com/docs/en/platform/turtlebot3/pc_setup/) for turtlebot3 PC setup.
 
-Install Ubuntu on Remote PC.
+### Install Ubuntu on Remote PC.
 
 Install ROS on Remote PC
 
@@ -18,7 +18,7 @@ install [gazebo](http://emanual.robotis.com/docs/en/platform/turtlebot3/simulati
 
 
 
-##Setup
+## Setup
 
 
 ```bash
@@ -28,7 +28,7 @@ $ wget https://raw.githubusercontent.com/ROBOTIS-GIT/robotis_tools/master/instal
 ```
 
 
-##Bringup
+## Bringup
 
 
 
