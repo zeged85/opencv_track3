@@ -34,7 +34,6 @@ echo "export SVGA_VGPU10=0" >> ~/.bashrc
 cd ~/catkin_ws/src/
 git clone https://github.com/zeged85/opencv_track3.git
 cd ~/catkin_ws && catkin_make
-cp ~/catkin_ws/src/follow/misc/plannar_mover.cpp ~/catkin_ws/src/plannar_mover/src/
 
 ```
 
