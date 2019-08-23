@@ -17,6 +17,15 @@ a ROS package for color based following
 ### 2. install [gazebo](http://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/#turtlebot3-simulation-using-gazebo) from turtlebot3 PC setup guide.
 
 
+## environment
+
+```bash
+echo "export TURTLEBOT3_MODEL=waffle_pi" >> ~/.bashrc
+echo "export SVGA_VGPU10=0" >> ~/.bashrc
+
+```
+
+
 
 ## Setup
 
