@@ -48,9 +48,8 @@ class LineFollower(object):
         def __init__(self):
 
                 self.bridge_object = CvBridge()
-                self.image = rospy.Subscriber("/usb_cam/image_raw",Image,self.camera_callback, queue_size=1)
-                #self.scan = rospy.Subscriber("/scan", LaserScan, self.scan_callback, queue_size=1)
-                #self.image = rospy.Subscriber("/camera/rgb/image_raw",Image,self.camera_callback, queue_size=1)
+                #self.image = rospy.Subscriber("/usb_cam/image_raw",Image,self.camera_callback, queue_size=1)
+                self.image = rospy.Subscriber("/camera/rgb/image_raw",Image,self.camera_callback, queue_size=1)
                 self.scan = rospy.Subscriber("/scan", LaserScan, self.scan_callback, queue_size=1)
                 self.command = rospy.Subscriber("/command", String, self.command_callback, queue_size=1)
                 self.laser_values = np.full(360, np.inf)
@@ -449,6 +448,7 @@ def main():
         while not (line_follower_object.recieved_image and line_follower_object.recieved_scan):
                 print 'waiting for data'
                 rate.sleep()
+        print 'data recieved!'
         while not rospy.is_shutdown():
                 #hello_str = "hello world %s" % rospy.get_time()
                 #rospy.loginfo(hello_str)
