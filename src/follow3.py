@@ -70,7 +70,7 @@ class LineFollower(object):
                 print msg.data
                 action = msg.data.split('^')
                 if action[0]=='move':
-                    self.state='yield'
+                    #self.state='yield'
                     if action[1]=='up':
                         self.drive(1,0)
                     elif action[1]=='left':
@@ -82,6 +82,7 @@ class LineFollower(object):
 
                     time.sleep(0.2)
                     self.state='stop'
+                    self.drive(0,0)
 
 
                 if action[0]=='follow':
@@ -97,7 +98,8 @@ class LineFollower(object):
         def scan_callback(self,msg):
                 #save
                 self.laser_values = np.array( msg.ranges )
-                self.laser_values[self.laser_values==0.0]=3.0
+                #print  type(self.laser_values[0])
+                self.laser_values[self.laser_values==np.inf]=3.5
                 #proccess
                 #180/5 = 36 silces = 5 size = 36
                 self.regions = {
@@ -108,7 +110,8 @@ class LineFollower(object):
                         'left':   min(min(msg.ranges[54:89]), 3),
                         }
                 self.recieved_scan = True
-                #print self.laser_values[0]
+                #print max(self.laser_values)
+                #print self.regions
 
 
         def camera_callback(self,data):
@@ -188,7 +191,7 @@ class LineFollower(object):
 
         def follow(self):
                 #bypass remote control
-                if self.state == 'yield':
+                if self.state == 'stop':
                         return
                 if not (self.target_found and self.object_location != None and self.state == 'follow'):
                         self.drive(0,0)
@@ -201,11 +204,12 @@ class LineFollower(object):
         
                 #print current_value
 
-                ang = pid.compute(current_value, target_value)
+                
 
                 keep_distance = 0.3
                 spectrum = 3	
                 mid = np.amin(np.concatenate((self.laser_values[-spectrum:], self.laser_values[:spectrum]), axis=0) )
+                #print len(self.laser_values)
 
                 #right = np.amin(self.laser_values[-2*spectrum:-spectrum])
                 #left = np.amin(self.laser_values[spectrum:spectrum*2])
@@ -267,12 +271,36 @@ class LineFollower(object):
 
                                 return
                         '''
-                        if mid<0.3:
-                                #drive(1,ang)
-                                vel = 0.0
-                        elif mid<0.5:
-                                #drive(mid - keep_distance ,ang)
-                                vel = min(abs(mid*0.1),0.05)
+                        ang = -pid.compute(current_value, target_value)
+                        min_distance = np.amin(self.laser_values)
+                        print 'min_distance:' + str(min_distance)
+                        #vel *= min_distance/3.5 
+                        maxfar = 1
+                        for idx, v in enumerate(range(0,89)):
+                            #print 'idx: ' + str(idx) + ' v: ' + str(self.laser_values[v])
+                            maxfar= min( ( (self.laser_values[v]/3.5)*( 1 / math.sin(math.radians(90-idx)) )   ), maxfar)
+                        ang-= (1 - maxfar)*5.0
+                        print 'maxfar left:' + str(maxfar)
+                        vel *= ((1 + maxfar)/2)
+
+
+                        maxfar = 1
+                        for idx, v in enumerate(reversed(range(269,359))):
+                            #print 'idx: ' + str(idx) + ' v: ' + str(self.laser_values[v])
+                            maxfar= min( ( (self.laser_values[v]/3.5)*( 1 / math.sin(math.radians(90-idx)) )   ), maxfar)
+                        ang+= (1 - maxfar)*5.0
+                        print 'maxfar right:' + str(maxfar)
+                        vel *= ((1 + maxfar)/2)
+
+
+
+
+                        #if mid<0.3:
+                        #        drive(1,ang)
+                        #        vel = 0.0
+                        #elif mid<0.5:
+                        #        #drive(mid - keep_distance ,ang)
+                        #        vel = min(abs(mid*0.1),0.05)
 
                                 
                 else:
@@ -286,83 +314,12 @@ class LineFollower(object):
                 #ang=0
                         
                 #print 'driving', vel, -ang, ' mid =', mid
-                self.drive(vel,-ang)
+                print 'ang:' + str(math.radians(ang)) 
+                self.drive(vel,ang)
 
                 #print 'height', height, ' width', width, ' cx:',cx
 
 
-
-
-        def take_action(self):
-                msg = Twist()
-                linear_x = 0
-                angular_z = 0
-                regions = self.regions
-                #print regions
-                state_description = ''
-                front_limit = 0.7
-                side_limit = 0.7
-
-                print 'found', self.target_found, 'location', self.object_location
-    
-                if regions['front'] > front_limit and regions['fleft'] > side_limit and regions['fright'] > side_limit:
-                        state_description = 'case 1 - nothing'
-                        #linear_x = 0.6
-                        angular_z = 0
-                        self.follow()
-                        return
-                elif regions['front'] < front_limit and regions['fleft'] > side_limit and regions['fright'] > side_limit:
-                        state_description = 'case 2 - front'
-                        linear_x = 0
-                        angular_z = 0.3
-                elif regions['front'] > front_limit and regions['fleft'] > side_limit and regions['fright'] < side_limit:
-                        state_description = 'case 3 - fright'
-                        linear_x = 0
-                        angular_z = 0.3
-                        #pid('right',regions)
-                elif regions['front'] > front_limit and regions['fleft'] < side_limit and regions['fright'] > side_limit:
-                        state_description = 'case 4 - fleft'
-                        linear_x = 0
-                        angular_z = -0.3
-                        #pid('left',regions)
-                elif regions['front'] < front_limit and regions['fleft'] > side_limit and regions['fright'] < side_limit:
-                        state_description = 'case 5 - front and fright'
-                        linear_x = 0
-                        angular_z = 0.3
-                elif regions['front'] < front_limit and regions['fleft'] < side_limit and regions['fright'] > side_limit:
-                        state_description = 'case 6 - front and fleft'
-                        linear_x = 0
-                        angular_z = -0.3
-                elif regions['front'] < front_limit and regions['fleft'] < side_limit and regions['fright'] < side_limit:
-                        state_description = 'case 7 - front and fleft and fright'
-                        if regions['front'] < 0.5:
-                                linear_x = -0.1
-                                angular_z = -0.3
-                                state_description+=' - To close!'
-                        else:
-                                linear_x = 0.1
-                                angular_z = 0.3
-                elif regions['front'] > front_limit and regions['fleft'] < side_limit and regions['fright'] < side_limit:
-                        state_description = 'case 8 - fleft and fright'
-                        linear_x = 0.3
-                        angular_z = 0
-                else:
-                        state_description = 'unknown case'
-                        rospy.loginfo(regions)
-        
-                rospy.loginfo(state_description)
-
-                if not self.target_found:
-                        #self.drive(0,0)
-                        rospy.loginfo('target lost!')
-                        #return
-                        linear_x = 0
-                
-
-                msg.linear.x = linear_x
-                msg.angular.z = angular_z
-                #pub_.publish(msg)
-                self.drive(linear_x,angular_z)
 
 
 

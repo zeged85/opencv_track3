@@ -11,6 +11,8 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 from std_msgs.msg import String
 
+import time
+
 POINTS_BUFFER = 10
 x_co = 0
 y_co = 0
@@ -142,6 +144,8 @@ def camera_callback(data):
          
 
 
+
+
 def startCapture(clock):
     pts = deque(maxlen=POINTS_BUFFER)
     
@@ -150,12 +154,23 @@ def startCapture(clock):
     #image = rospy.Subscriber("/usb_cam/image_raw",Image,camera_callback, queue_size=1)
     image = rospy.Subscriber("/camera/rgb/image_raw",Image,camera_callback, queue_size=1)
     global recieved_image, cv_image
+
+    while not recieved_image:
+        print 'waiting for image'
+        time.sleep(0.1)
+    
+    frame = cv_image
+    cv2.namedWindow("frame")
+    cv2.setMouseCallback('frame',on_mouse, (frame, clock));   
     while True:
         if recieved_image:
             recieved_image = False
             #_, frame = cap.read()
             frame = cv_image
-            frame = cv2.flip(frame, +1);
+
+            
+
+            #frame = cv2.flip(frame, +1);
             #sliders = list(clock.table.values())
             sliders = clock.table
             #print (sliders)
@@ -249,15 +264,15 @@ def startCapture(clock):
 
 
             cv2.imshow('frame', frame)
-            cv2.setMouseCallback('frame',on_mouse, (frame, clock));
-            s=hsv[y_co,x_co]
+
+            #s=hsv[y_co,x_co]
             #print "H:",s[0],"      S:",s[1],"       V:",s[2]
-            fontface = cv2.FONT_HERSHEY_SIMPLEX
-            fontscale = 1
-            fontcolor = (255, 255, 255)
+            #fontface = cv2.FONT_HERSHEY_SIMPLEX
+            #fontscale = 1
+            #fontcolor = (255, 255, 255)
             #cv2.putText(im, str(Id), (x,y+h), fontface, fontscale, fontcolor) 
-            cv2.putText(frame,str(s[0])+","+str(s[1])+","+str(s[2]), (x_co,y_co),fontface, fontscale, fontcolor)
-            cv2.drawContours(frame, cnts, -1, (0,255,0), 3)
+            #cv2.putText(frame,str(s[0])+","+str(s[1])+","+str(s[2]), (x_co,y_co),fontface, fontscale, fontcolor)
+            #cv2.drawContours(frame, cnts, -1, (0,255,0), 3)
 
 
 
@@ -280,7 +295,7 @@ def startCapture(clock):
     #sys.exit(app.exec_())
     
 def on_mouse(event,x,y,flag,param):
-    print (event, x, y, flag)
+    #print (event, x, y, flag, param)
     global x_co
     global y_co
     if(event==1):
