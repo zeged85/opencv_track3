@@ -176,7 +176,8 @@ def startCapture(clock):
             #print (sliders)
             #t = sliders[6]
             #_, threshold = cv2.threshold(frame, t, 255, cv2.THRESH_BINARY)
-            blur = cv2.GaussianBlur(frame, (15,15), 0)
+            #blur = cv2.GaussianBlur(frame, (15,15), 0)
+            blur = frame
             #blur = cv2.bilateralFilter(frame,19,75,75)
             hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
 
@@ -236,7 +237,7 @@ def startCapture(clock):
                 M = cv2.moments(c)
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
                 # only proceed if the radius meets a minimum size
-                if radius > 20:
+                if radius > 5:
                     # draw the circle and centroid on the frame,
                     # then update the list of tracked points
                     cv2.circle(frame, (int(x), int(y)), int(radius),(0, 255, 255), 2)
@@ -265,21 +266,21 @@ def startCapture(clock):
 
             cv2.imshow('frame', frame)
 
-            #s=hsv[y_co,x_co]
+            s=hsv[y_co,x_co]
             #print "H:",s[0],"      S:",s[1],"       V:",s[2]
-            #fontface = cv2.FONT_HERSHEY_SIMPLEX
-            #fontscale = 1
-            #fontcolor = (255, 255, 255)
+            fontface = cv2.FONT_HERSHEY_SIMPLEX
+            fontscale = 1
+            fontcolor = (255, 255, 255)
             #cv2.putText(im, str(Id), (x,y+h), fontface, fontscale, fontcolor) 
-            #cv2.putText(frame,str(s[0])+","+str(s[1])+","+str(s[2]), (x_co,y_co),fontface, fontscale, fontcolor)
-            #cv2.drawContours(frame, cnts, -1, (0,255,0), 3)
+            cv2.putText(frame,str(s[0])+","+str(s[1])+","+str(s[2]), (x_co,y_co),fontface, fontscale, fontcolor)
+            cv2.drawContours(frame, cnts, -1, (0,255,0), 3)
 
 
 
 
 
             
-            #cv2.imshow('mask', mask)
+            cv2.imshow('mask', mask)
             #cv2.imshow('res', res)
             #cv2.imshow('smoothed', smoothed)
             #cv2.imshow('blur', blur)

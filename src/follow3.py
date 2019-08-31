@@ -100,6 +100,7 @@ class LineFollower(object):
                 self.laser_values = np.array( msg.ranges )
                 #print  type(self.laser_values[0])
                 self.laser_values[self.laser_values==np.inf]=3.5
+                self.laser_values[self.laser_values==0.0]=3.5
                 #proccess
                 #180/5 = 36 silces = 5 size = 36
                 self.regions = {
@@ -198,7 +199,7 @@ class LineFollower(object):
                         return
                 pid = self.camera_pid
                 pid.kp = -0.0003
-                pid.kd = 0.004
+                pid.kd = 0.001
                 target_value = 0.0
                 current_value = self.object_location
         
@@ -273,27 +274,30 @@ class LineFollower(object):
                         '''
                         ang = -pid.compute(current_value, target_value)
                         min_distance = np.amin(self.laser_values)
-                        print 'min_distance:' + str(min_distance)
+                        #print 'min_distance:' + str(min_distance)
                         #vel *= min_distance/3.5 
                         maxfar = 1
+                        alpha = 0.15
                         for idx, v in enumerate(range(0,89)):
                             #print 'idx: ' + str(idx) + ' v: ' + str(self.laser_values[v])
-                            maxfar= min( ( (self.laser_values[v]/3.5)*( 1 / math.sin(math.radians(90-idx)) )   ), maxfar)
-                        ang-= (1 - maxfar)*5.0
+                            if self.laser_values[v] < 1:
+                                maxfar= min( ( (self.laser_values[v]*alpha/0.5)*( (1-alpha) / (0.5*math.sin(math.radians(90-idx))) )   ), maxfar)
+                        ang-= (1 - maxfar)*0.3
                         print 'maxfar left:' + str(maxfar)
-                        vel *= ((1 + maxfar)/2)
+                        #vel *= ((1 + maxfar)/2)
 
-
+                        maxfar_left = maxfar
                         maxfar = 1
                         for idx, v in enumerate(reversed(range(269,359))):
                             #print 'idx: ' + str(idx) + ' v: ' + str(self.laser_values[v])
-                            maxfar= min( ( (self.laser_values[v]/3.5)*( 1 / math.sin(math.radians(90-idx)) )   ), maxfar)
-                        ang+= (1 - maxfar)*5.0
+                            if self.laser_values[v] < 1:
+                                maxfar= min( ( (self.laser_values[v]*alpha/0.5)*( (1-alpha) / (0.5*math.sin(math.radians(90-idx))) )   ), maxfar)
+                        ang+= (1 - maxfar)*0.3
                         print 'maxfar right:' + str(maxfar)
-                        vel *= ((1 + maxfar)/2)
+                        vel *= ((maxfar_left + maxfar)/2)
 
 
-
+                        print 'left: ' + str(self.laser_values[44]) + ' midl: ' + str(self.laser_values[0]) + ' midr: ' + str(self.laser_values[359]) + ' right: ' + str(self.laser_values[314]) 
 
                         #if mid<0.3:
                         #        drive(1,ang)
@@ -314,7 +318,7 @@ class LineFollower(object):
                 #ang=0
                         
                 #print 'driving', vel, -ang, ' mid =', mid
-                print 'ang:' + str(math.radians(ang)) 
+                #print 'ang:' + str(math.radians(ang)) 
                 self.drive(vel,ang)
 
                 #print 'height', height, ' width', width, ' cx:',cx
