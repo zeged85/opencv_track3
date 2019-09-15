@@ -282,8 +282,8 @@ class LineFollower(object):
                             #print 'idx: ' + str(idx) + ' v: ' + str(self.laser_values[v])
                             if self.laser_values[v] < 1:
                                 maxfar= min( ( (self.laser_values[v]*alpha/0.5)*( (1-alpha) / (0.5*math.sin(math.radians(90-idx))) )   ), maxfar)
-                        ang-= (1 - maxfar)*0.3
-                        print 'maxfar left:' + str(maxfar)
+                        #ang-= (1 - maxfar)*0.3
+                        #print 'maxfar left:' + str(maxfar)
                         #vel *= ((1 + maxfar)/2)
 
                         maxfar_left = maxfar
@@ -292,12 +292,12 @@ class LineFollower(object):
                             #print 'idx: ' + str(idx) + ' v: ' + str(self.laser_values[v])
                             if self.laser_values[v] < 1:
                                 maxfar= min( ( (self.laser_values[v]*alpha/0.5)*( (1-alpha) / (0.5*math.sin(math.radians(90-idx))) )   ), maxfar)
-                        ang+= (1 - maxfar)*0.3
-                        print 'maxfar right:' + str(maxfar)
+                        ang+= (maxfar_left - maxfar)*0.5
+                        #print 'maxfar right:' + str(maxfar)
                         vel *= ((maxfar_left + maxfar)/2)
 
 
-                        print 'left: ' + str(self.laser_values[44]) + ' midl: ' + str(self.laser_values[0]) + ' midr: ' + str(self.laser_values[359]) + ' right: ' + str(self.laser_values[314]) 
+                        #print 'left: ' + str(self.laser_values[44]) + ' midl: ' + str(self.laser_values[0]) + ' midr: ' + str(self.laser_values[359]) + ' right: ' + str(self.laser_values[314]) 
 
                         #if mid<0.3:
                         #        drive(1,ang)
