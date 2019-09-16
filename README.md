@@ -17,7 +17,8 @@ a ROS package for person (step 1:color based) following + gazebo dynamic environ
 ### 2. install [turtlebot3 gazebo](http://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/#turtlebot3-simulation-using-gazebo) simulation files.
 
 
-### 3. update Gazebo to 7+ [link](http://gazebosim.org/tutorials?cat=install&tut=install_ubuntu&ver=7.0).
+### 3. update Gazebo to 7+ 
+### for instructions [link](http://gazebosim.org/tutorials?cat=install&tut=install_ubuntu&ver=7.0).
 
 ```bash
 sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
