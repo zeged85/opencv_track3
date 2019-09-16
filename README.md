@@ -1,7 +1,7 @@
 # follow : ROS package
-a ROS package for color based following
+a ROS package for person (step 1:color based) following + gazebo dynamic environment
 
-## Installation
+## Install ROS and turtlebot3 environment
 
 
 ### 1. Follow the install [guide](http://emanual.robotis.com/docs/en/platform/turtlebot3/pc_setup/) for turtlebot3 PC setup.
@@ -17,7 +17,7 @@ a ROS package for color based following
 ### 2. install [turtlebot3 gazebo](http://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/#turtlebot3-simulation-using-gazebo) simulation files.
 
 
-### [update gazebo](http://gazebosim.org/tutorials?cat=install&tut=install_ubuntu&ver=7.0).
+### 3. update Gazebo to 7+ [link](http://gazebosim.org/tutorials?cat=install&tut=install_ubuntu&ver=7.0).
 
 ```bash
 sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
@@ -28,7 +28,7 @@ sudo apt-get install gazebo7
 ```
 
 
-## environment
+### 4. add bashrc args
 
 ```bash
 echo "export TURTLEBOT3_MODEL=waffle_pi" >> ~/.bashrc
@@ -36,9 +36,9 @@ echo "export SVGA_VGPU10=0" >> ~/.bashrc
 
 ```
 
+## follow package
 
-
-## Setup
+### installing the follow package
 
 
 ```bash
@@ -50,10 +50,11 @@ cd ~/catkin_ws && catkin_make
 
 
 ## Bringup
-run simulation or real robot
+running simulation or real robot
+either run your robot with roscore, or launch the simulator.
 
-### terminal 1 - rosCore: simulator or robot
-run normal robot bringup with roscore, or simulator.
+
+### terminal 1 - rosCore: simulation
 
 simulator
 ```bash
