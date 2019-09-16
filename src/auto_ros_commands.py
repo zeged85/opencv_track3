@@ -151,8 +151,8 @@ def startCapture(clock):
     
     print ('test')
     #cap = cv2.VideoCapture(0)
-    #image = rospy.Subscriber("/usb_cam/image_raw",Image,camera_callback, queue_size=1)
-    image = rospy.Subscriber("/camera/rgb/image_raw",Image,camera_callback, queue_size=1)
+    image = rospy.Subscriber("/usb_cam/image_raw",Image,camera_callback, queue_size=1)
+    #image = rospy.Subscriber("/camera/rgb/image_raw",Image,camera_callback, queue_size=1)
     global recieved_image, cv_image
 
     while not recieved_image:

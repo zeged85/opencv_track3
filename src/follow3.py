@@ -151,8 +151,8 @@ class LineFollower(object):
                         mask = cv2.inRange(hsv, lower, upper)
 
                         #filters
-                        #mask = cv2.erode(mask, None, iterations=2)
-                        #mask = cv2.dilate(mask, None, iterations=2)
+                        mask = cv2.erode(mask, None, iterations=2)
+                        mask = cv2.dilate(mask, None, iterations=2)
 
                         # find contours
                         
